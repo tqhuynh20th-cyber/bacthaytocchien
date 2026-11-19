@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Bậc Thầy Tốc Chiến</title>
+<style>
+/* Layout idea: a booth slate at 1920x1080 scaled to the TV. Bắt đầu → SMASH bumper → 8 questions drawn from the bank → SMASH bumper → pass (6/8) or queue again.
+   SMASH palette: White, Skyblue, Blue and Dark Blue carry the screen; Yellow is kept for the main call to action, Pink for misses.
+   All fonts ship with the page so the TV runs offline. */
+@font-face{font-family:"GT America Compressed";src:url("assets/fonts/gt-america-compressed-bold.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block}
+@font-face{font-family:"Archivo";src:url("assets/fonts/archivo-vietnamese-standard-normal.woff2") format("woff2-variations");font-weight:100 900;font-stretch:62% 125%;font-style:normal;font-display:block;
+  unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB}
+@font-face{font-family:"Archivo";src:url("assets/fonts/archivo-latin-standard-normal.woff2") format("woff2-variations");font-weight:100 900;font-stretch:62% 125%;font-style:normal;font-display:block;
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Be Vietnam Pro";src:url("assets/fonts/be-vietnam-pro-vietnamese-400-normal.woff2") format("woff2");font-weight:400;font-display:block;
+  unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB}
+@font-face{font-family:"Be Vietnam Pro";src:url("assets/fonts/be-vietnam-pro-latin-400-normal.woff2") format("woff2");font-weight:400;font-display:block;
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Be Vietnam Pro";src:url("assets/fonts/be-vietnam-pro-vietnamese-600-normal.woff2") format("woff2");font-weight:600;font-display:block;
+  unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB}
+@font-face{font-family:"Be Vietnam Pro";src:url("assets/fonts/be-vietnam-pro-latin-600-normal.woff2") format("woff2");font-weight:600;font-display:block;
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Be Vietnam Pro";src:url("assets/fonts/be-vietnam-pro-vietnamese-700-normal.woff2") format("woff2");font-weight:700 900;font-display:block;
+  unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB}
+@font-face{font-family:"Be Vietnam Pro";src:url("assets/fonts/be-vietnam-pro-latin-700-normal.woff2") format("woff2");font-weight:700 900;font-display:block;
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+:root{
+  --white:#ffffff;
+  --sky:#31c8fe;
+  --blue:#319ffe;
+  --navy:#021838;
+  --yellow:#f28127;
+  --pink:#ce3ace;
+  --glass:rgba(2,24,56,.62);
+  --glass-strong:rgba(2,24,56,.86);
+  --stroke:rgba(255,255,255,.18);
+  --muted:rgba(255,255,255,.74);
+  --brand:linear-gradient(90deg,var(--sky),var(--blue));
+  --ok:var(--sky);
+  --no:var(--pink);
+  --num:"GT America Compressed","Archivo",sans-serif;
+  --display:"Archivo",sans-serif;
+  --body:"Be Vietnam Pro",sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;overflow:hidden;overscroll-behavior:none}
+body{background:var(--navy) url("assets/bg.jpg") center/cover no-repeat;color:var(--white);font-family:var(--body);
+  -webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation}
+button:focus-visible{outline:4px solid var(--sky);outline-offset:4px}
+.viewport{position:fixed;inset:0;overflow:hidden}
+.stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform:translate(-50%,-50%) scale(var(--s,1));transform-origin:center center}
+/* background lives inside the stage so the bumper videos can screen-blend against it */
+.stage-bg{position:absolute;inset:0;overflow:hidden;background:var(--navy)}
+.bg-img{position:absolute;inset:-4%;background:url("assets/bg.jpg") center/cover no-repeat;will-change:transform;
+  animation:drift 26s ease-in-out infinite alternate;animation-play-state:paused}
+.stage[data-screen="start"] .bg-img{animation-play-state:running}
+@keyframes drift{0%{transform:scale(1) translate3d(-1.6%,.6%,0)}100%{transform:scale(1.08) translate3d(1.6%,-.8%,0)}}
+.stage-bg::after{content:"";position:absolute;inset:0;background:radial-gradient(62% 62% at 50% 50%, rgba(2,24,56,.62), rgba(2,24,56,.25) 75%, rgba(2,24,56,.1))}
+.screen{position:absolute;inset:0}
+.hidden{display:none !important}
+.glass{background:var(--glass);border:1px solid var(--stroke);border-radius:28px;
+  -webkit-backdrop-filter:blur(18px) saturate(120%);backdrop-filter:blur(18px) saturate(120%)}
+.num{font-family:var(--num);font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:0}
+.label{font-family:var(--display);font-stretch:75%;font-variation-settings:"wdth" 75;font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:24px;line-height:1.3}
+.cmp{font-family:var(--display);font-stretch:62%;font-variation-settings:"wdth" 62;font-weight:900;text-transform:uppercase}
+/* gradient text: pad the paint box so stacked Vietnamese marks (Ố, Ầ, Ễ…) are never clipped */
+.grad{display:inline-block;background:var(--brand);-webkit-background-clip:text;background-clip:text;color:transparent;
+  padding:.2em .05em .08em;margin:-.2em -.05em -.08em}
+.press{transition:transform .12s ease,filter .2s ease,background-color .2s ease}
+.press:active{transform:scale(.97)}
+.btn{position:relative;overflow:hidden;background:var(--white);color:var(--navy);border:0;border-radius:999px;padding:24px 56px;line-height:1.2;
+  font-family:var(--display);font-stretch:75%;font-variation-settings:"wdth" 75;font-weight:800;letter-spacing:.1em;text-transform:uppercase;font-size:32px;
+  box-shadow:0 14px 44px -12px rgba(49,159,254,.9)}
+.btn:active{background:#d9f3ff}
+.ghost{background:rgba(255,255,255,.08);border:2px solid var(--stroke);border-radius:999px;padding:14px 28px;font-size:22px;font-weight:600;color:var(--white)}
+.ghost:active{background:rgba(255,255,255,.16)}
+.top-logo{position:absolute;left:50%;top:30px;transform:translateX(-50%);height:118px;width:auto;display:block;pointer-events:none}
+
+/* ---------- START (centered) ---------- */
+#start{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 120px 20px}
+#start .logo{height:180px;width:auto;display:block}
+#start .logo,.title,.steps{position:relative}
+.beams{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.beam{position:absolute;top:-20%;height:140%;left:-700px;width:520px;mix-blend-mode:screen;will-change:transform;
+  background:linear-gradient(90deg,rgba(49,200,254,0),rgba(49,200,254,.26) 50%,rgba(49,200,254,0));
+  animation:sweep 15s linear infinite}
+.beam.b2{width:380px;background:linear-gradient(90deg,rgba(49,159,254,0),rgba(49,159,254,.22) 50%,rgba(49,159,254,0));animation-duration:21s;animation-delay:-9s}
+.beam.b3{width:300px;background:linear-gradient(90deg,rgba(206,58,206,0),rgba(206,58,206,.16) 50%,rgba(206,58,206,0));animation-duration:18s;animation-delay:-4s;animation-direction:reverse}
+@keyframes sweep{from{transform:translate3d(0,0,0) skewX(-14deg)}to{transform:translate3d(3300px,0,0) skewX(-14deg)}}
+.halo{position:absolute;left:50%;top:47%;width:1500px;height:520px;margin:-260px 0 0 -750px;border-radius:50%;mix-blend-mode:screen;
+  background:radial-gradient(closest-side,rgba(49,200,254,.22),rgba(49,159,254,.08) 60%,rgba(49,159,254,0));
+  animation:breathe 5s ease-in-out infinite}
+@keyframes breathe{0%,100%{opacity:.55;transform:scale(.96)}50%{opacity:1;transform:scale(1.04)}}
+.title{margin:40px 0 0;font-size:200px;line-height:1.1;letter-spacing:.005em;white-space:nowrap;color:var(--white)}
+.steps{display:flex;gap:16px;margin-top:44px}
+.pill{display:flex;align-items:center;gap:16px;padding:12px 30px 12px 14px;border-radius:999px;font-size:26px;font-weight:600;line-height:1.3}
+.pill .num{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:var(--brand);color:var(--navy);font-size:34px;line-height:1}
+.pill b{color:var(--sky);font-weight:700}
+.start-btn{margin-top:56px;width:780px;padding:0;height:160px;font-size:84px;letter-spacing:.06em;border-radius:40px;font-stretch:62%;font-variation-settings:"wdth" 62;font-weight:900;line-height:1.1;
+  background:var(--yellow);color:var(--navy);animation:glow 2.4s ease-in-out infinite}
+.start-btn:active{background:#ff9a4a}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(242,129,39,0),0 18px 60px -12px rgba(242,129,39,.9)}50%{box-shadow:0 0 0 18px rgba(242,129,39,.16),0 18px 80px -8px rgba(242,129,39,.95)}}
+.stats{position:absolute;right:40px;bottom:28px;display:flex;gap:28px;color:var(--muted);font-size:18px;opacity:.7}
+.stats .num{font-size:30px;color:var(--white);margin-right:8px;vertical-align:-3px}
+
+/* ---------- GAME ---------- */
+#game{display:flex;flex-direction:column;gap:18px;padding:30px 80px 40px}
+.hud{position:relative;display:flex;align-items:center;justify-content:space-between;height:118px;flex:0 0 auto}
+.hud .left{display:flex;align-items:center;gap:26px}
+.progress{display:flex;align-items:baseline;gap:12px}
+.progress .label{color:var(--muted)}
+.progress .num{font-size:76px;line-height:1}
+.progress .num small{font-size:46px;color:var(--muted)}
+.hud .top-logo{top:0}
+.tracker{display:flex;align-items:center;gap:24px}
+.tracker .need{text-align:right;line-height:1.1}
+.tracker .need .num{font-size:58px}
+.tracker .need .num small{font-size:34px;color:var(--muted)}
+.tracker .need .label{display:block;font-size:17px;color:var(--muted)}
+.pips{display:flex;gap:10px}
+.pip{width:42px;height:42px;border-radius:50%;border:3px solid rgba(255,255,255,.3);display:grid;place-items:center;font-size:22px;font-weight:800;color:var(--navy);line-height:1}
+.pip.cur{border-color:var(--white);box-shadow:0 0 0 5px rgba(49,200,254,.3)}
+.pip.ok{background:var(--ok);border-color:var(--ok)}
+.pip.no{background:var(--no);border-color:var(--no);color:var(--white)}
+.timer{position:relative;height:12px;border-radius:999px;background:rgba(255,255,255,.14);overflow:hidden;flex:0 0 auto}
+.timer i{position:absolute;inset:0;transform-origin:left center;background:var(--brand);border-radius:999px}
+.timer.low i{background:var(--yellow)}
+.qwrap{display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:center;padding:22px 44px;flex:0 0 218px}
+.clock{--p:1;position:relative;width:168px;height:168px;border-radius:50%;display:grid;place-items:center;
+  background:conic-gradient(var(--sky) calc(var(--p)*360deg), rgba(255,255,255,.14) 0)}
+.clock::before{content:"";position:absolute;inset:12px;border-radius:50%;background:var(--glass-strong)}
+.clock span{position:relative;font-family:var(--num);font-weight:700;font-size:100px;line-height:1;font-variant-numeric:tabular-nums}
+.clock.low{background:conic-gradient(var(--yellow) calc(var(--p)*360deg), rgba(255,255,255,.14) 0)}
+.question{margin:0;font-weight:700;font-size:52px;line-height:1.3;text-wrap:balance}
+.answers{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:20px;flex:1;min-height:0}
+.ans{position:relative;display:flex;align-items:center;gap:30px;padding:20px 36px;text-align:left;
+  border:2px solid rgba(255,255,255,.28);border-radius:26px;color:var(--navy);font-weight:700;font-size:40px;line-height:1.3;
+  background-image:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0) 55%);
+  box-shadow:0 18px 44px -16px rgba(0,0,0,.6);
+  transition:transform .12s ease,opacity .25s ease,filter .25s ease}
+.ans:not([disabled]):active{transform:scale(.975);filter:brightness(1.08)}
+.ans[data-k="0"]{background-color:var(--pink)} .ans[data-k="1"]{background-color:var(--blue)}
+.ans[data-k="2"]{background-color:var(--yellow)} .ans[data-k="3"]{background-color:var(--sky)}
+.ans svg{flex:0 0 auto;width:58px;height:58px;fill:var(--navy)}
+.ans .txt{flex:1;min-width:0;overflow-wrap:anywhere}
+.ans .mark{flex:0 0 auto;width:72px;height:72px;border-radius:50%;display:grid;place-items:center;font-size:40px;font-weight:800;background:var(--navy);color:var(--white);line-height:1}
+.ans[disabled]{cursor:default}
+.ans.dim{opacity:.2;filter:saturate(.3)}
+.ans.right{border-color:var(--white);box-shadow:0 0 0 6px var(--white),0 0 64px rgba(49,200,254,.7)}
+.ans.picked-wrong{opacity:.55}
+.strip{flex:0 0 120px;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:0 22px 0 44px}
+.hint{font-size:30px;color:var(--muted);line-height:1.35}
+.hint b{color:var(--white)}
+.verdict{font-size:72px;line-height:1.05;white-space:nowrap}
+.verdict.ok{color:var(--ok)} .verdict.no{color:var(--no)}
+.detail{color:var(--muted);font-size:28px;line-height:1.35}
+.detail b{color:var(--white)}
+.fb{display:flex;align-items:center;gap:36px;min-width:0}
+.next-btn{padding:22px 48px;flex:0 0 auto}
+.next-btn::after{content:"";position:absolute;left:0;bottom:0;height:6px;width:100%;background:var(--brand);transform-origin:left;transform:scaleX(0)}
+.next-btn.auto::after{animation:fill var(--auto,4s) linear forwards}
+@keyframes fill{to{transform:scaleX(1)}}
+
+/* ---------- RESULT ---------- */
+#result{display:grid;grid-template-columns:600px 1fr;gap:80px;align-items:center;padding:190px 110px 70px}
+.tallycard{padding:40px 48px 44px;text-align:center}
+.tallycard .label{color:var(--sky)}
+.tally{display:flex;align-items:flex-end;justify-content:center;line-height:.8;margin:24px 0 10px}
+.tally .n{font-family:var(--num);font-weight:700;font-size:380px;padding-right:8px}
+.tally .of{font-family:var(--num);font-weight:700;font-size:136px;color:var(--muted);margin-bottom:30px}
+.tallycard .cap{font-size:26px;color:var(--muted)}
+.outcome{display:flex;flex-direction:column;align-items:flex-start;min-width:0}
+.outcome .label{color:var(--muted)}
+.big-verdict{font-size:176px;line-height:1.02;margin:22px 0 22px}
+.big-verdict.fail{color:var(--white)}
+.msg{font-size:42px;font-weight:700;line-height:1.35;max-width:28ch;text-wrap:balance}
+.msg-sub{font-size:28px;color:var(--muted);margin-top:12px;max-width:44ch;line-height:1.45}
+.recap{display:flex;gap:14px;margin:36px 0 42px}
+.recap .pip{width:62px;height:62px;font-size:30px}
+.result-actions{display:flex;align-items:center;gap:28px}
+.countdown{font-size:24px;color:var(--muted)}
+.countdown .num{font-size:40px;color:var(--white);margin:0 4px;vertical-align:-3px}
+
+/* ---------- SMASH bumper overlay ---------- */
+#fx{position:absolute;inset:0;z-index:6;background:transparent}
+#fx.blend{mix-blend-mode:screen}
+#fx video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+#fx video.on{display:block}
+
+.toast{position:absolute;left:50%;bottom:40px;transform:translateX(-50%);background:var(--white);color:var(--navy);padding:18px 32px;border-radius:999px;font-weight:600;font-size:24px;z-index:8}
+#confetti{position:absolute;inset:0;width:1920px;height:1080px;pointer-events:none;z-index:5}
+
+@keyframes rise{from{transform:translateY(18px);opacity:0}to{transform:none;opacity:1}}
+.enter{animation:rise .45s ease backwards}
+.answers .ans{animation:rise .3s ease backwards}
+.answers .ans:nth-child(2){animation-delay:.05s}.answers .ans:nth-child(3){animation-delay:.1s}.answers .ans:nth-child(4){animation-delay:.15s}
+@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
+</style>
+</head>
+<body>
+<div class="viewport">
+<div class="stage" id="stage">
+  <div class="stage-bg" aria-hidden="true"><div class="bg-img"></div></div>
+
+  <!-- START -->
+  <section id="start" class="screen">
+    <div class="beams" aria-hidden="true"><i class="halo"></i><i class="beam b1"></i><i class="beam b2"></i><i class="beam b3"></i></div>
+    <img class="logo enter" src="assets/logo.png" alt="Liên Minh Huyền Thoại: Tốc Chiến" width="895" height="480">
+    <h1 class="title cmp enter">Bậc thầy Tốc Chiến</h1>
+    <div class="steps enter">
+      <div class="pill glass"><span class="num">1</span>Chạm Bắt đầu</div>
+      <div class="pill glass"><span class="num">2</span>8 câu ngẫu nhiên, 20 giây mỗi câu</div>
+      <div class="pill glass"><span class="num">3</span><span>Đúng <b>6/8</b> câu là hoàn thành</span></div>
+    </div>
+    <button class="btn start-btn press" id="startBtn" type="button">Bắt đầu</button>
+    <div class="stats" id="stats"></div>
+  </section>
+
+  <!-- GAME -->
+  <section id="game" class="screen hidden">
+    <div class="hud">
+      <div class="left">
+        <button class="ghost press" id="quitBtn" type="button" aria-label="Kết thúc lượt chơi và quay về màn hình bắt đầu">Thoát</button>
+        <div class="progress"><span class="label">Câu</span><span class="num" id="qCount">1<small>/8</small></span></div>
+      </div>
+      <img class="top-logo" src="assets/logo.png" alt="Liên Minh Huyền Thoại: Tốc Chiến" width="895" height="480">
+      <div class="tracker">
+        <div class="pips" id="pips" aria-hidden="true"></div>
+        <div class="need"><span class="num" id="okCount">0<small>/6</small></span><span class="label">câu đúng cần đạt</span></div>
+      </div>
+    </div>
+    <div class="timer" id="timer" role="progressbar" aria-label="Thời gian còn lại" aria-valuemin="0" aria-valuemax="20"><i id="timerFill"></i></div>
+    <div class="qwrap glass">
+      <div class="clock" id="clock"><span id="clockNum">20</span></div>
+      <h2 class="question" id="question"></h2>
+    </div>
+    <div class="answers" id="answers"></div>
+    <div class="strip glass" aria-live="polite">
+      <div class="hint" id="hint">Chạm vào đáp án bạn chọn. Cần <b>đúng ít nhất 6/8 câu</b> để hoàn thành.</div>
+      <div class="fb hidden" id="feedback">
+        <div class="verdict cmp" id="verdict"></div>
+        <div class="detail" id="detail"></div>
+      </div>
+      <button class="btn next-btn press hidden" id="nextBtn" type="button">Câu tiếp</button>
+    </div>
+  </section>
+
+  <!-- RESULT -->
+  <section id="result" class="screen hidden">
+    <img class="top-logo" src="assets/logo.png" alt="Liên Minh Huyền Thoại: Tốc Chiến" width="895" height="480">
+    <div class="tallycard glass">
+      <div class="label">Kết quả của bạn</div>
+      <div class="tally"><span class="n grad" id="rCorrect">0</span><span class="of">/8</span></div>
+      <div class="cap">câu trả lời đúng</div>
+    </div>
+    <div class="outcome">
+      <div class="label">Bậc Thầy Tốc Chiến</div>
+      <div class="big-verdict cmp" id="rVerdict"><span>Hoàn thành!</span></div>
+      <div class="msg" id="rMsg"></div>
+      <div class="msg-sub" id="rSub"></div>
+      <div class="recap" id="recap" aria-hidden="true"></div>
+      <div class="result-actions">
+        <button class="btn press" id="doneBtn" type="button">Lượt tiếp theo</button>
+        <div class="countdown">Tự quay về màn hình bắt đầu sau <span class="num" id="cd">30</span> giây</div>
+      </div>
+    </div>
+  </section>
+
+  <canvas id="confetti" width="1920" height="1080" class="hidden"></canvas>
+
+  <!-- SMASH bumpers: A = vào game, C = hoàn thành, B = chưa đạt -->
+  <div id="fx" class="hidden" aria-hidden="true">
+    <video id="fxStart" muted playsinline preload="auto"><source src="assets/fx/fx-start.mp4" type="video/mp4"><source src="assets/fx/fx-start.webm" type="video/webm"></video>
+    <video id="fxPass" muted playsinline preload="auto"><source src="assets/fx/fx-pass.mp4" type="video/mp4"><source src="assets/fx/fx-pass.webm" type="video/webm"></video>
+    <video id="fxFail" muted playsinline preload="auto"><source src="assets/fx/fx-fail.mp4" type="video/mp4"><source src="assets/fx/fx-fail.webm" type="video/webm"></video>
+  </div>
+  <div class="toast hidden" id="toast" role="status"></div>
+</div>
+</div>
+
+<script>
+const BANK = [{"id":1,"q":"Trang bị trấn phái của Lux là gì?","a":["Vọng Âm Hòa Điệu","Giáp Gai","Trái Tim Khổng Thần","Súng Hải Tặc"],"c":0,"fixed":false},{"id":2,"q":"Ahri có 9 gì?","a":["9 đuôi","9 mạng","9 bạn trai","9 trang phục"],"c":0,"fixed":false},{"id":3,"q":"Khi đồng đội đạt Pentakill, nghĩa là họ vừa làm gì?","a":["Ăn 5 lớp giáp trụ","Ăn 5 mục tiêu lớn","Hạ gục 5 tướng địch trong thời gian ngắn","Mua 5 trang phục"],"c":2,"fixed":false},{"id":4,"q":"Đâu là phương tiện di chuyển đặc trưng của Corki?","a":["Xe đạp điện","Máy bay","Xe ôm công nghệ","Yasuo"],"c":1,"fixed":false},{"id":5,"q":"Muốn chiến thắng một trận Tốc Chiến, Chiến Hữu cần phá gì?","a":["Yasuo","Heo đất tiết kiệm","Nhà Chính đối phương","“Phá Game”"],"c":2,"fixed":false},{"id":6,"q":"Rồng trong Tốc Chiến thường xuất hiện ở đâu?","a":["Hang Rồng","Sở thú","Bệ Đá Cổ","Nhà Yasuo"],"c":0,"fixed":false},{"id":7,"q":"Vị tướng nào có thể tạo Tường Gió?","a":["Teemo","Nasus","Yasuo","Thần Gió"],"c":2,"fixed":false},{"id":8,"q":"Khi sử dụng Tốc Biến, tướng sẽ làm gì?","a":["Chạy nhanh hơn cả deadline","Dịch chuyển một khoảng ngắn","Bay thẳng về Bệ Đá Cổ","Triệu hồi Yasuo"],"c":1,"fixed":false},{"id":9,"q":"Yuumi thường làm gì để hỗ trợ đồng đội?","a":["Hồi máu","Đóng góp sự dễ thương","Không làm gì cả","Meo Meo"],"c":0,"fixed":false},{"id":10,"q":"Tướng nào có khả năng lăn cầu tuyết trong ván đấu?","a":["Ahri","Nunu & Willump","Darius","Yasuo"],"c":1,"fixed":false},{"id":11,"q":"Trong Tốc Chiến, ai thường sử dụng Trừng Phạt?","a":["Người đi rừng","Người chơi xạ thủ","Người đi đường trên","Yasuo đi hỗ trợ"],"c":0,"fixed":false},{"id":12,"q":"Teemo đặt nấm để làm gì?","a":["Bẫy gây sát thương cho người chơi địch dẫm phải","Để trồng vườn","Không để làm gì cả","Để dành ăn"],"c":0,"fixed":false},{"id":13,"q":"Vị tướng nào nổi tiếng với tạ (cây búa to)?","a":["Poppy","Ahri","Yasuo","Sona"],"c":0,"fixed":false},{"id":14,"q":"Trong Tốc Chiến, ADC thường đảm nhận vai trò nào?","a":["Gây sát thương chủ lực","Đi gank hỗ trợ đồng đội","Không có vị trí ADC","Kiểm soát mục tiêu lớn với trừng phạt"],"c":0,"fixed":false},{"id":15,"q":"Vị tướng nào có chú gấu tên Tibbers?","a":["Annie","Lux","Ahri","Yasuo"],"c":0,"fixed":false},{"id":16,"q":"Muốn mua trang bị trong trận, người chơi cần có đủ gì?","a":["Vàng","Tự tin","Năng lượng","Nội năng"],"c":0,"fixed":false},{"id":17,"q":"Trong Tốc Chiến, người chơi thường gọi người chơi cùng đội là gì?","a":["Chiến Hữu","Rapper","Anh Trai","Streamer"],"c":0,"fixed":false},{"id":18,"q":"Tướng nào chỉ có 4 viên đạn?","a":["Jhin","Jinx","Yasuo","Lee Sin"],"c":0,"fixed":false},{"id":19,"q":"Bài vàng của thần bài Twisted Fate có hiệu ứng gì?","a":["Choáng","Không có hiệu ứng","Hóa vàng đối thủ","Hồi máu cho đối thủ"],"c":0,"fixed":false},{"id":20,"q":"“Hasagi” là câu nói điển hình của tướng nào?","a":["Yasuo","Riven","Ahri","Teemo"],"c":0,"fixed":false},{"id":21,"q":"AAA Aram là chế độ chơi gì?","a":["Chế Độ Phiêu Lưu","Chế Độ Xếp Hạng Đơn/Đôi","Chế Độ Xếp Hạng Huyền Thoại","Chế Độ Tùy chọn"],"c":0,"fixed":false},{"id":22,"q":"Vực Gió Hú là bản đồ của Chế Độ Aram hay Xếp Hạng Đơn Đôi?","a":["Chế Độ Aram","Xếp Hạng Đơn Đôi"],"c":0,"fixed":false},{"id":23,"q":"Bản đồ Vực Gió Hú của chế độ chơi AAA Aram có mấy đường giao tranh?","a":["1","2","3","4"],"c":0,"fixed":true},{"id":24,"q":"Tốc Chiến là game thuộc thể loại nào?","a":["Moba","Bắn súng FPS","Thời Trang","Đua xe"],"c":0,"fixed":false},{"id":25,"q":"Thuật ngữ “combat” có nghĩa là gì?","a":["Giao Tranh","Ăn rồng","Biến về bệ đá cổ","Đầu hàng"],"c":0,"fixed":false},{"id":26,"q":"Caitlyn nên lên Vô Cực Kiếm hay Mũ Phù Thủy Rabadon?","a":["Vô Cực Kiếm","Mũ Phù Thủy Rabadon"],"c":0,"fixed":false},{"id":27,"q":"Trong chế độ xếp hạng đơn/đôi, rank Vàng có thể ghép trận cùng rank Thách Đấu không?","a":["Có","Không"],"c":1,"fixed":true},{"id":28,"q":"Thông Thạo 7 một tướng có nghĩa là gì?","a":["Điểm thông thạo của tướng đó đã đạt cột mốc cao nhất.","Dùng tướng đó 7 lần.","Dùng tướng đó chơi ở 7 chế độ khác nhau.","Mua tướng đó 7 lần."],"c":0,"fixed":false},{"id":29,"q":"Trong Chế Độ AAA Aram, Chiến Hữu đổ xúc xắc để đổi tướng hay để đổi vận may?","a":["Đổi tướng","Đổi vận may"],"c":0,"fixed":false},{"id":30,"q":"Ý nghĩa của trang phục (skin) trong Tốc Chiến là gì?","a":["Tạo hình mới mẻ của tướng","Tăng sức mạnh cho tướng","Tăng độ tự tin của người chơi","Tăng uy tín của người chơi"],"c":0,"fixed":false},{"id":31,"q":"Trong chế độ AAA Aram, Chọn Lõi Nâng Cấp là để tăng sức mạnh tướng hay tăng thời gian trận đấu?","a":["Tăng sức mạnh tướng","Tăng thời gian trận đấu"],"c":0,"fixed":false},{"id":32,"q":"Trong trận đấu, nên phá trụ hay phá game?","a":["Phá trụ","Phá game"],"c":0,"fixed":false},{"id":33,"q":"Đi rừng nên mang theo trừng phạt hay Yuumi?","a":["Trừng Phạt","Yuumi"],"c":0,"fixed":false},{"id":34,"q":"Khi có lợi thế trước đối thủ, nên làm gì?","a":["Ăn Baron và lăn cầu tuyết ván đấu","Ăn rừng của đồng minh","Ở trong nhà đợi đối thủ farm","AFK"],"c":0,"fixed":false},{"id":35,"q":"Khi đồng đội đạt Quadra Kills, tiếp theo Chiến Hữu sẽ làm gì?","a":["Hỗ trợ đồng đội đạt Penta Kills","Tranh Penta Kills","Không làm gì cả","Rời trận đấu"],"c":0,"fixed":false},{"id":36,"q":"Khi gặp đội hình địch có nhiều tướng hồi máu, hút máu thì Chiến Hữu sẽ làm gì?","a":["Lên trang bị giảm hồi máu hoặc mang thiêu đốt","Lên trang bị hút máu","Lên trang bị tăng máu","Lên trang bị hồi máu"],"c":0,"fixed":false},{"id":37,"q":"Ping “?” được dùng trong trường hợp nào?","a":["Khi địch rời vị trí","Khi đồng đội mắc lỗi","Khi đồng đội có pha xử lý đỉnh","Khi Vayne đi top"],"c":0,"fixed":false},{"id":38,"q":"Tướng mới ra trong phiên bản cập nhật 7.3 vừa qua là ai?","a":["Hwei","Yasuo","Teemo","Darius"],"c":0,"fixed":false},{"id":39,"q":"Mùa giải xếp hạng mới trong phiên bản 7.3 là?","a":["S23","Mùa Hè","Mùa Đông","Mùa Xuân"],"c":0,"fixed":false},{"id":40,"q":"Vị tướng nào sở hữu trang phục phần thưởng xếp hạng mùa S23?","a":["Milio","Teemo","Yasuo","Baron Nashor"],"c":0,"fixed":false},{"id":41,"q":"AAA Aram phiên bản 7.3 mang chủ đề nào?","a":["Âm nhạc","Du lịch","Ẩm Thực","Cosplay"],"c":0,"fixed":false},{"id":42,"q":"Mỗi khi nâng cấp Lõi trong chế độ AAA Aram, Chiến Hữu được lựa chọn 1 trong mấy Lõi?","a":["1","2","3","4"],"c":2,"fixed":true},{"id":43,"q":"Mỗi lần chọn Lõi trong chế độ AAA Aram, Chiến Hữu được làm mới Lõi bao nhiêu lần?","a":["2","4","6","8"],"c":0,"fixed":true},{"id":44,"q":"Vị tướng nào được mệnh danh là Hoạ Sĩ trong Tốc Chiến (phiên bản 7.3)?","a":["Hwei","Milio","Ahri","Yasuo"],"c":0,"fixed":false},{"id":45,"q":"Wild Pass 7.3 mang đến trang phục Kog'Maw gì?","a":["Gọt Bút Chì","Gọt Vỏ Cây","Gọt Vỏ Táo","Gọt Rửa Tội Lỗi"],"c":0,"fixed":false},{"id":46,"q":"Nhóm tướng nào được điều chỉnh lớn về trang bị và chí mạng trong 7.3?","a":["Xạ Thủ","Hỗ Trợ","Pháp Sư","Chống Chịu"],"c":0,"fixed":false},{"id":47,"q":"Đâu là thứ KHÔNG thuộc trải nghiệm ARAM AAA?","a":["Nâng Cấp Lõi","Đi rừng","Giao tranh 5vs5","Phá Trụ"],"c":1,"fixed":false},{"id":48,"q":"Bản cập nhật 7.3 làm mới cơ chế lớp giáp của công trình nào?","a":["Trụ","Nhà Chính","Rồng","Lính"],"c":0,"fixed":false}];      // ngân hàng câu hỏi
+const ROUND = 8;            // số câu mỗi lượt
+const PASS = 6;             // số câu đúng cần đạt
+const TIME = 20000;         // thời gian mỗi câu
+const MAX_TWO = 2;          // tối đa số câu 2 lựa chọn trong một lượt
+const AUTO_NEXT = 4000;     // tự sang câu tiếp sau khi trả lời
+const RETURN_PASS = 30;     // giây tự quay về màn hình bắt đầu khi hoàn thành
+const RETURN_FAIL = 15;     // giây tự quay về khi chưa đạt
+/* mốc trong video bumper (giây): lúc phủ kín màn hình và lúc bắt đầu mở ra */
+const FX_COVER = 0.43, FX_UNCOVER = 5.55;
+const SHAPES = [
+  '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 4 29 27H3z"/></svg>',
+  '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2 30 16 16 30 2 16z"/></svg>',
+  '<svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13"/></svg>',
+  '<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="4" width="24" height="24" rx="3"/></svg>'
+];
+const $ = id => document.getElementById(id);
+const fmt = n => n.toLocaleString("vi-VN");
+const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------- 16:9 stage scaling ---------- */
+function fit() { $("stage").style.setProperty("--s", Math.min(window.innerWidth / 1920, window.innerHeight / 1080)); }
+window.addEventListener("resize", fit);
+document.addEventListener("fullscreenchange", () => setTimeout(fit, 50));
+fit();
+document.addEventListener("contextmenu", e => e.preventDefault());
+document.addEventListener("gesturestart", e => e.preventDefault());
+
+/* ---------- lưu trên máy: thống kê + câu của lượt trước ---------- */
+const STATS_KEY = "bacthay-booth-stats";
+function loadStats() { try { return JSON.parse(localStorage.getItem(STATS_KEY)) || { plays: 0, passes: 0, lastIds: [] }; } catch (e) { return { plays: 0, passes: 0, lastIds: [] }; } }
+function saveStats(s) { try { localStorage.setItem(STATS_KEY, JSON.stringify(s)); } catch (e) {} }
+
+let S = { screen: "start", log: [], deck: [], idx: 0 };
+let timerStart = 0, raf = 0, locked = false, autoT = 0, cdT = 0;
+
+function clearTimers() { cancelAnimationFrame(raf); clearTimeout(autoT); clearInterval(cdT); }
+function show(screen) {
+  S.screen = screen;
+  $("stage").dataset.screen = screen;
+  for (const id of ["start", "game", "result"]) $(id).classList.toggle("hidden", id !== screen);
+}
+function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+/* Bốc 8 câu ngẫu nhiên: không lấy lại câu của lượt ngay trước, tối đa MAX_TWO câu chỉ có 2 lựa chọn. */
+function drawRound() {
+  const lastIds = new Set(loadStats().lastIds || []);
+  let pool = BANK.filter(q => !lastIds.has(q.id));
+  if (pool.length < ROUND) pool = BANK.slice();
+  shuffle(pool);
+  const pick = [];
+  let two = 0;
+  for (const q of pool) {
+    if (pick.length === ROUND) break;
+    if (q.a.length === 2) { if (two >= MAX_TWO) continue; two++; }
+    pick.push(q);
+  }
+  return pick.map(item => {
+    if (item.fixed) return { id: item.id, q: item.q, a: item.a.slice(), c: item.c };
+    const order = shuffle(item.a.map((_, i) => i));
+    return { id: item.id, q: item.q, a: order.map(i => item.a[i]), c: order.indexOf(item.c) };
+  });
+}
+
+/* ---------- SMASH bumper: hoà sáng vào, phủ kín thì đổi màn hình bên dưới, rồi mở ra ---------- */
+let fxBusy = false;
+function playFx(id, onCover, onDone) {
+  const box = $("fx"), v = $(id);
+  let covered = false, finished = false, poll = 0;
+  const cover = () => { if (!covered) { covered = true; onCover(); } };
+  const finish = () => {
+    if (finished) return; finished = true;
+    cancelAnimationFrame(poll);
+    cover();
+    v.pause(); v.classList.remove("on");
+    box.classList.add("hidden"); box.classList.remove("blend");
+    box.onpointerdown = null; v.onended = null; v.onerror = null;
+    fxBusy = false;
+    onDone();
+  };
+  if (reduced) { cover(); onDone(); return; }
+  fxBusy = true;
+  box.classList.remove("hidden"); box.classList.add("blend");
+  v.classList.add("on");
+  try { v.currentTime = 0; } catch (e) {}
+  const watch = () => {
+    const t = v.currentTime;
+    if (!covered && t >= FX_COVER) { cover(); box.classList.remove("blend"); }
+    if (covered && t >= FX_UNCOVER) box.classList.add("blend");
+    poll = requestAnimationFrame(watch);
+  };
+  v.onended = finish;
+  v.onerror = finish;
+  box.onpointerdown = finish;                 // chạm để bỏ qua
+  const p = v.play();
+  if (p && p.catch) p.catch(finish);          // không phát được thì vào thẳng
+  poll = requestAnimationFrame(watch);
+  setTimeout(finish, 9000);                   // chốt an toàn
+}
+
+/* ---------- start ---------- */
+function renderStart() {
+  clearTimers();
+  stopConfetti();
+  const st = loadStats();
+  $("stats").innerHTML = st.plays
+    ? `<span><span class="num">${fmt(st.plays)}</span>lượt đã chơi</span><span><span class="num">${fmt(st.passes)}</span>lượt hoàn thành</span>`
+    : "";
+  show("start");
+}
+$("startBtn").addEventListener("click", startRound);
+
+function startRound() {
+  if (fxBusy) return;
+  clearTimers();
+  const deck = drawRound();
+  const st = loadStats(); st.lastIds = deck.map(d => d.id); saveStats(st);
+  S = { screen: "start", idx: 0, log: [], deck };
+  playFx("fxStart", () => { show("game"); showQuestion(false); }, () => startTimer());
+}
+
+/* ---------- game ---------- */
+function okCount() { return S.log.filter(x => x.correct).length; }
+function renderPips() {
+  $("pips").innerHTML = S.deck.map((_, i) => {
+    const r = S.log[i];
+    const cls = r ? (r.correct ? "ok" : "no") : (i === S.idx ? "cur" : "");
+    return `<span class="pip ${cls}">${r ? (r.correct ? "✓" : "✕") : ""}</span>`;
+  }).join("");
+  $("okCount").innerHTML = `${okCount()}<small>/${PASS}</small>`;
+}
+function showQuestion(run = true) {
+  const item = S.deck[S.idx];
+  locked = false;
+  S.cp = { logLen: S.log.length };
+  $("qCount").innerHTML = `${S.idx + 1}<small>/${S.deck.length}</small>`;
+  renderPips();
+  $("question").textContent = item.q;
+  const box = $("answers");
+  box.style.gridTemplateRows = item.a.length === 2 ? "1fr" : "";
+  box.innerHTML = item.a.map((t, k) =>
+    `<button class="ans" type="button" data-k="${k}">${SHAPES[k]}<span class="txt"></span></button>`).join("");
+  box.querySelectorAll(".ans").forEach((b, k) => {
+    b.querySelector(".txt").textContent = item.a[k];
+    b.setAttribute("aria-label", `Đáp án ${k + 1}: ${item.a[k]}`);
+  });
+  $("hint").classList.remove("hidden");
+  $("feedback").classList.add("hidden");
+  $("nextBtn").classList.add("hidden");
+  $("nextBtn").classList.remove("auto");
+  clearTimers();
+  paintTimer(TIME);
+  if (run) startTimer();
+}
+function startTimer() { timerStart = performance.now(); cancelAnimationFrame(raf); tick(); }
+function paintTimer(left) {
+  const secs = Math.ceil(left / 1000), p = left / TIME;
+  $("timerFill").style.transform = `scaleX(${p})`;
+  $("clock").style.setProperty("--p", p);
+  $("clockNum").textContent = secs;
+  $("timer").setAttribute("aria-valuenow", secs);
+  const low = left <= 5000;
+  $("clock").classList.toggle("low", low);
+  $("timer").classList.toggle("low", low);
+}
+function tick() {
+  const left = Math.max(0, TIME - (performance.now() - timerStart));
+  paintTimer(left);
+  if (left <= 0) { choose(-1); return; }
+  raf = requestAnimationFrame(tick);
+}
+$("answers").addEventListener("click", e => { const b = e.target.closest(".ans"); if (b && !locked && !fxBusy) choose(+b.dataset.k); });
+
+function choose(k) {
+  if (locked) return;
+  locked = true;
+  cancelAnimationFrame(raf);
+  const item = S.deck[S.idx];
+  const correct = k === item.c;
+  S.log.push({ id: item.id, picked: k >= 0 ? item.a[k] : null, right: item.a[item.c], correct });
+  document.querySelectorAll("#answers .ans").forEach((b, i) => {
+    b.disabled = true;
+    if (i === item.c) { b.classList.add("right"); b.insertAdjacentHTML("beforeend", '<span class="mark" aria-hidden="true">✓</span>'); }
+    else if (i === k) { b.classList.add("picked-wrong"); b.insertAdjacentHTML("beforeend", '<span class="mark" aria-hidden="true">✕</span>'); }
+    else b.classList.add("dim");
+  });
+  renderPips();
+  const n = okCount();
+  const v = $("verdict");
+  v.className = "verdict cmp " + (correct ? "ok" : "no");
+  v.textContent = correct ? "Chính xác!" : (k < 0 ? "Hết giờ!" : "Chưa đúng");
+  const d = $("detail");
+  if (correct) d.innerHTML = n === PASS ? "Bạn đã đủ <b>6 câu đúng</b>, hoàn thành thử thách rồi!" : `Đã đúng <b>${n}/${PASS}</b> câu cần đạt`;
+  else { d.innerHTML = "Đáp án đúng: <b></b>"; d.querySelector("b").textContent = item.a[item.c]; }
+  const last = S.idx + 1 >= S.deck.length;
+  const nb = $("nextBtn");
+  nb.textContent = last ? "Xem kết quả" : "Câu tiếp";
+  $("hint").classList.add("hidden");
+  $("feedback").classList.remove("hidden");
+  nb.classList.remove("hidden");
+  nb.style.setProperty("--auto", AUTO_NEXT + "ms");
+  void nb.offsetWidth; nb.classList.add("auto");
+  autoT = setTimeout(next, AUTO_NEXT);
+}
+$("nextBtn").addEventListener("click", next);
+function next() {
+  clearTimeout(autoT);
+  if (S.screen !== "game" || !locked || fxBusy) return;
+  if (S.idx + 1 < S.deck.length) { S.idx++; showQuestion(); }
+  else {
+    const pass = okCount() >= PASS;
+    playFx(pass ? "fxPass" : "fxFail", () => showResult(false, false), () => startResultClock());
+  }
+}
+$("quitBtn").addEventListener("click", () => { if (!fxBusy) renderStart(); });
+document.addEventListener("keydown", e => {
+  if (fxBusy) return;
+  if (S.screen === "start" && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); startRound(); }
+  else if (S.screen === "game") {
+    if (!locked && /^[1-4]$/.test(e.key)) { const k = +e.key - 1; if (k < S.deck[S.idx].a.length) choose(k); }
+    else if (locked && e.key === "Enter") next();
+  } else if (S.screen === "result" && e.key === "Enter") renderStart();
+});
+
+/* ---------- result ---------- */
+function showResult(restored, run = true) {
+  clearTimers();
+  const n = okCount();
+  const pass = n >= PASS;
+  if (!restored) { const st = loadStats(); st.plays++; if (pass) st.passes++; saveStats(st); }
+  $("rCorrect").textContent = n;
+  const v = $("rVerdict");
+  v.innerHTML = pass ? '<span class="grad">Hoàn thành!</span>' : "<span>Chưa đạt</span>";
+  v.className = "big-verdict cmp " + (pass ? "" : "fail");
+  $("rMsg").textContent = pass
+    ? "Chúc mừng, bạn chính là Bậc Thầy Tốc Chiến!"
+    : `Bạn đúng ${n}/8 câu, còn thiếu ${PASS - n} câu nữa thôi.`;
+  $("rSub").textContent = pass
+    ? "Cảm ơn bạn đã tham gia thử thách cùng Tốc Chiến."
+    : "Mời bạn xếp hàng để chơi lại nhé. Lượt sau sẽ có bộ câu hỏi khác!";
+  $("recap").innerHTML = S.log.map(r => `<span class="pip ${r.correct ? "ok" : "no"}">${r.correct ? "✓" : "✕"}</span>`).join("");
+  $("cd").textContent = pass ? RETURN_PASS : RETURN_FAIL;
+  show("result");
+  if (run) startResultClock();
+}
+function startResultClock() {
+  const pass = okCount() >= PASS;
+  let left = pass ? RETURN_PASS : RETURN_FAIL;
+  $("cd").textContent = left;
+  clearInterval(cdT);
+  cdT = setInterval(() => { left--; $("cd").textContent = Math.max(left, 0); if (left <= 0) renderStart(); }, 1000);
+  if (pass) startConfetti();
+}
+$("doneBtn").addEventListener("click", () => { if (!fxBusy) renderStart(); });
+
+/* ---------- confetti khi hoàn thành (màu SMASH) ---------- */
+let confRaf = 0;
+function startConfetti() {
+  if (reduced) return;
+  const cv = $("confetti"), ctx = cv.getContext("2d");
+  const colors = ["#31c8fe", "#319ffe", "#ffffff", "#31c8fe", "#f28127", "#ce3ace"];
+  const parts = Array.from({ length: 170 }, () => ({
+    x: 960 + (Math.random() - .5) * 400, y: 1100, vx: (Math.random() - .5) * 26, vy: -(22 + Math.random() * 22),
+    w: 10 + Math.random() * 12, h: 16 + Math.random() * 18, r: Math.random() * 6.28, vr: (Math.random() - .5) * .3,
+    c: colors[Math.floor(Math.random() * colors.length)]
+  }));
+  cv.classList.remove("hidden");
+  const t0 = performance.now();
+  const frame = now => {
+    ctx.clearRect(0, 0, 1920, 1080);
+    for (const p of parts) {
+      p.vy += .55; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c; ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h * Math.abs(Math.cos(p.r * 2))); ctx.restore();
+    }
+    if (now - t0 < 4200) confRaf = requestAnimationFrame(frame); else stopConfetti();
+  };
+  confRaf = requestAnimationFrame(frame);
+}
+function stopConfetti() { cancelAnimationFrame(confRaf); const cv = $("confetti"); cv.getContext("2d").clearRect(0, 0, 1920, 1080); cv.classList.add("hidden"); }
+
+let toastT = 0;
+function toast(msg) { const t = $("toast"); t.textContent = msg; t.classList.remove("hidden"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.add("hidden"), 3000); }
+
+/* ---------- boot (giữ lượt đang chơi khi trang được cập nhật) ---------- */
+function start(data) {
+  if (data && data.S && data.S.deck && data.S.deck.length) {
+    S = data.S;
+    if (S.screen === "game") { show("game"); showQuestion(); return; }
+    if (S.screen === "result") { showResult(true); return; }
+  }
+  renderStart();
+}
+window.claude?.hot?.snapshot?.(() => ({ S: S.screen === "game" && S.cp ? { ...S, log: S.log.slice(0, S.cp.logLen) } : S }));
+window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
+</script>
+</body>
+</html>
